@@ -443,7 +443,7 @@ pipeline {
 				
 						Create the Src_Code & Commit the changes in Src_Code Repository
 					
-			DevOps Automation :
+			DevOps Automation TASKS :
 				Application Build 	--> 	Process of Compiling the Src_Code and Create Artifacts(Binaries - *.war/*.jar/.dll/*.exec)
 				Unit Testing 
 				Promote for further testing QA/UAT
