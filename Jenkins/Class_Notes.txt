@@ -556,17 +556,26 @@ ls ~/.ssh
 #id_rsa - private key
 #id_rsa.pub - public
 
+#CREATE ADDITIONAL AUTHORIZE KEY WITH THE COMMAND BELOW, THE PUBLIC KEY IS NOT ENOUGH
+	cat id_rsa.pub > authorized_keys
 
-cat id_rsa.pub > authorized_keys
-
-chown -R devopsadmin /home/devopsadmin/.ssh
-chmod 600 /home/devopsadmin/.ssh/authorized_keys
-chmod 700 /home/devopsadmin/.ssh
+#LIMIT ACCESS/AUTHORIZATION TO ONLY DEVOPS ADMIN
+	chown -R devopsadmin /home/devopsadmin/.ssh
+	chmod 600 /home/devopsadmin/.ssh/authorized_keys
+	chmod 700 /home/devopsadmin/.ssh
 
 
 In Jenkins Master - Add Node Configuration
 		
-		Goto Manage Jenkins - Add New Node Configuration										
+		Goto Manage Jenkins - Add New Node Configuration
+		REMOTE ROOT DIRECTORY = the home directory of the user account you created
+		Launch Method = ssh
+		Host = private IP add of your AWS VM
+		use the private key of id_rsa
+		host key verification strategy = manually trusted key verification
+	#save AND launch
+	#click on the slavenode creadted
+	#click TRUST SSH KEY HOST and AUTHORIZE
 			
 			
 Summary ::
