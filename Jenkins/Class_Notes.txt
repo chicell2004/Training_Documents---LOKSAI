@@ -573,9 +573,16 @@ In Jenkins Master - Add Node Configuration
 		Host = private IP add of your AWS VM
 		use the private key of id_rsa
 		host key verification strategy = manually trusted key verification
+		username: the user name you created withuseradd
+
 	#save AND launch
 	#click on the slavenode creadted
 	#click TRUST SSH KEY HOST and AUTHORIZE
+
+NOTE: Befoe you click BUILD formaven stage, you have to configure maven tools. 
+	GO TO TOOLS --> ADD MAVEN
+	MAVEN NAME = Maven version (mvn --version)
+	MAVEN_HOME = Maven home directory
 			
 			
 Summary ::
