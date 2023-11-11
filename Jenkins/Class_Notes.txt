@@ -268,40 +268,49 @@ DevOps ::::
 		
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Jenkins Installation Steps ::
+# JENKINS INSTALLATION Steps ::
 
 1. Launch AWS Instance - Ubuntu VM
 2. Add port 8080 in security Group  - default port for jenkins
 
-sudo -i 
-apt update -y 
+3. sudo -i 
+4. apt update -y 
 
-# JDK Package Installation ::
-
+5. INSTALL JDK Package Installation (JAVA) ::
 sudo apt install fontconfig openjdk-11-jre -y
 java -version
 		
-# Jenkins Installation in Ubuntu ::
+6 Jenkins Installation in Ubuntu ::
 		
 sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
   https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt-get update -y
-sudo apt-get install jenkins -y
 
-jenkins --version
-systemctl status jenkins 
+7. sudo apt-get update -y
+8. sudo apt-get install jenkins -y
+
+jenkins --version  	-------> check jenkins version
+systemctl status jenkins ------> check if your jenkins is running
 systemctl stop jenkins 
 systemctl start jenkins 
 systemctl restart jenkins 
 systemctl enable jenkins 
 
+# After Jenkins is installed,
+	To see the path jenkins is installed, and files, and folders
+	/var/lib/jenkins/
 
-# Jenkins Post installation Activities :::		# default username : admin / pasword : admin
+
+# Jenkins Post installation Activities (done using web browser) :::	
+Access the jenkins page copying the AWS public IP address and using port 8080
+# copy the password from your jenkins terminals and run unlock the jenkins
+
+# default username : admin / pasword : admin
 	Unlocked Jenkins 
-	Installed Plugins 
+	Installed Plugins -----> using suggested pluggings 
 	Created Admin user 
 		
 Summary :::
