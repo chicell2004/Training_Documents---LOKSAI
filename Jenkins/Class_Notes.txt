@@ -377,28 +377,29 @@ Summary :::
 				Certs
 				Passwordless Auth 
 		
+WHEN WE TALK ABOUT JENKIN JOBS, PIPELINES OR PROJECTS
+		Jenkins Project / Jobs / Pipeline ::: (TWO TYPES)
 		
-		Jenkins Project / Jobs / Pipeline :::
-		
-			-- Free Style Projects 
+		1.)	-- Free Style Projects ----> for testing purposes
 			
-			-- Pipeline Projects	-	created using Groovy Scripts!
+		2.)	-- Pipeline Projects	-	created using Groovy Scripts!
 			
-			Handling Jenkins Variables ::::			"${var_name}"		"${varname}"
+			HANDLING JENKINS VARIABLES ::::			"${var_name}"		"${varname}"
 			
 				Environment Variables 
 				
 				User Defined Variables
 				
 			
-			-- Pipeline Projects	-	created using Groovy Scripts!	
+	2.) PIPELINE PROJECTS		-	created using Groovy Scripts!	
 					
 					- Scripted Pipeline 	-->
-					- Declarative Pipeline  -->
+					- Declarative Pipeline  --> simplifiedversion of scripted pipelines
 
-			Scripting Language 		:: Shell/Groovy/YAML/Python.
+			Scripting Languages you should learn 		:: Shell/Groovy/YAML/Python.
 			Programming Language	::
-			
+
+#CREATING A PIPELINE PROJECT USING DECLARATIVE PIPELINE			
 			
 pipeline {
     agent { label 'slave1' }
@@ -423,14 +424,17 @@ pipeline {
 }	
 		
 		
-			Pipeline Project :::
+			PIPELINE PROJECTS STAGES/STEPS BASED ON REAL TIME ENVT ::: USING MAVEN AS THE BUILD TOOL
 			
-				Stages :
+				Stages (tasks or activities given to perform) :::
 					Clone the Src_Code Repos in the build server
-					Build 
+					Build::::: Using some build tools
 					Create Artifacts
-				
-				
+					Unit testing
+					Promote for further testing
+					Email notifications
+
+NOTE: each stage name should be unique when creating stages for your pipeline project				
 				
 				
 		Build Tools :::
@@ -440,7 +444,6 @@ pipeline {
 							Maven / Gradle 
 							
 				Maven ==> Build Tool
-				
 					pom.xml ==> It is used to define the dependencies and plugins.
 					maven goals :::
 						clean		
@@ -477,14 +480,16 @@ pipeline {
 		
 		
 			Jenkins_Master :::(VM)	Is to Create/Manage Jenkins Jobs and Schedule the Jobs.
-			
-					Jenkins_SlaveNode1 ==> Build Application - Java 
+
+					JENKINS SLAVENODE CONFIGURATION ==> Build Application - Java 
 								1. Launch VM 
 								2. Install the build tools
 										GIT,JDK,MAVEN
 								3. Create user in Slave Node 
 								4. Authentication : SSH Connection
 										SSH-Key Based Authentication.
+								5. Go back to jenkins master
+									Add nodes
 
 
 
@@ -517,28 +522,28 @@ pipeline {
     }
 }
 _______________________________________________________
-Configure Slave Node1 for Java Maven App. :
+Configure Slave Node1 for Java Maven App. : ACTUAL BUILD SHOULD HAPPEN IN THE SLAVE NODE AND NOT MASTER NODE
 ---------------------------------------------------
 Install Java ::
 
 sudo -i
 
 
-sudo apt update -y 
+sudo apt update -y  ------------------------> first update the default packages
 sudo apt install openjdk-11-jre -y
 java -version
 
-Install GIT :
+Install GIT : if its not installed in the system
 
 sudo apt install git -y
 
-Install Maven - Build Tool :
-https://maven.apache.org/install.html
+Install Maven - Build Tool : (use official pages when installing)
+https://maven.apache.org/install.html 
 
 sudo apt install maven -y 
 
 
-Create User in Jenkins Slave Machine & Create SSH Keys 
+Create User in Jenkins Slave Machine & Create SSH Keys (this is to integrate jenkins slavenode to masters node)
 
 	SSH Keys --> is composed of public and private keys 
 
@@ -548,45 +553,58 @@ Create User in Jenkins Slave Machine & Create SSH Keys
 #useradd -m -d /home/devopsadmin devopsadmin
 #useradd devopsadmin
 
-useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin (create user with home directory)
 
 su - devopsadmin
 
-#ssh-keygen
+#ssh-keygen --------> create some ssh-keygen for the user to enableauthentication
 
-#for Ubuntu ::
+#for Ubuntu system ::
 ssh-keygen -t rsa -b 4096 -m PEM
 
-
+ls -a -------------> view the file created
 ls ~/.ssh 
 
-#You should see following two files:
-
-#id_rsa - private key
-#id_rsa.pub - public
+#You should see following two files: in .ssh
+	1. id_rsa ------> private key
+	2. id_rsa.pub ---> public key
 
 #CREATE ADDITIONAL AUTHORIZE KEY WITH THE COMMAND BELOW, THE PUBLIC KEY IS NOT ENOUGH
-	cat id_rsa.pub > authorized_keys
+	command: cat id_rsa.pub > authorized_keys
 
-#LIMIT ACCESS/AUTHORIZATION TO ONLY DEVOPS ADMIN
+#LIMIT ACCESS/AUTHORIZATION of the authorized key TO ONLY DEVOPS ADMIN
 	chown -R devopsadmin /home/devopsadmin/.ssh
 	chmod 600 /home/devopsadmin/.ssh/authorized_keys
 	chmod 700 /home/devopsadmin/.ssh
 
 
-In Jenkins Master - Add Node Configuration
+GO TO Jenkins Master - Add Node Configuration
 		
 		Goto Manage Jenkins - Add New Node Configuration
+		Description: short description about the project
 		REMOTE ROOT DIRECTORY = the home directory of the user account you created
+		Labels : give a name to use identify the project (eg, slave1)
 		Launch Method = ssh
-		Host = private IP add of your AWS VM
+		Host = private IP add of your slavenode AWS VM
+		Credentials ---> click add
+				kind ----> ssh username with private key
+				ID & description -----> can use same details
+				username ------> devopsadmin
+				private key ---> use the private key of id_rsa
 		use the private key of id_rsa
-		host key verification strategy = manually trusted key verification
-		username: the user name you created withuseradd
+		host key verification strategy ---> manually trusted key verification
+				tick require manual verification
 
 	#save AND launch
 	#click on the slavenode creadted
 	#click TRUST SSH KEY HOST and AUTHORIZE
+
+After Jenkins Slave node is running, you can rerout all projects running on masters to slavenodes
+	TO REROUTE PROJECTS RUNNING ON MASTERS NODE TO SLAVE NOEDS
+			1. Go to the project pipeline, click configure
+			2. go to the script
+			3. change label to the jenkins slave label name
+			4. Apply changes and build now to run on jenkins slavenodes
 
 NOTE: Befoe you click BUILD formaven stage, you have to configure maven tools. 
 	GO TO TOOLS --> ADD MAVEN
