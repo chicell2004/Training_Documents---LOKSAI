@@ -428,7 +428,7 @@ pipeline {
 			
 				Stages (tasks or activities given to perform) :::
 					Clone the Src_Code Repos in the build server
-					Build::::: Using some build tools
+					Build::::: Using some build tools (Maven)
 					Create Artifacts
 					Unit testing
 					Promote for further testing
@@ -445,11 +445,11 @@ NOTE: each stage name should be unique when creating stages for your pipeline pr
 							
 				Maven ==> Build Tool
 					pom.xml ==> It is used to define the dependencies and plugins.
-					maven goals :::
-						clean		
+					#MAVEN GOALS :::
+						clean -------> used to clean up the exiting artifacts		
 						test
 						build 
-						package 
+						package  ---> used to perfom the test, create the artifacts and perfrom unit testing.
 				
 				Application Team :
 				
@@ -610,6 +610,20 @@ NOTE: Befoe you click BUILD formaven stage, you have to configure maven tools.
 	GO TO TOOLS --> ADD MAVEN
 	MAVEN NAME = Maven version (mvn --version)
 	MAVEN_HOME = Maven home directory
+
+STEPS TO RUN A PIPELINE
+	1. create and launch your pipeline
+	2. clone the repository
+	3. perfoem maven clean and package (to clean, build and perform unit testing)
+		command: sh 'mvn clean package'
+NOTE: Before you trigger maven build, you have to configure maven tools in your dashboard, in other for the slave node
+	to interact with the master node
+			---manage jenkins
+			---tools
+			---add maven
+			---untick install automatically
+			---copy mvn home directory from your terminal and add
+	4. Then you can now trigger build after maven installation
 			
 			
 Summary ::
