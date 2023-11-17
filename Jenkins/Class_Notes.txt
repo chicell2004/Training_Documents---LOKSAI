@@ -667,37 +667,10 @@ Next ::
 				UAT 	--> User Acceptance Testing			=====>								Prod Environment VM			
 				
 
-
+#STEPS TO DEPLOY TO A SERVER USING TOMCAT
 		Launch an Instance :
-		
 				Install Application Server ::: (tomcat)
-					
-				In Jenkins Master ::	Publish over SSH Plugins 
-				
-					Jenkins_Master				==> Create & Manage Jenkins Jobs/Schedule the job to slave ndoes.
-						Jenkins_SlaveNode1		==> Perform the build 
-					QA_Server 					==> Run the application using tomcat 
-					UAT_Server 
-					Kubernetes
-				
-
-				What is Deployment????
-				
-				--> It is process of copying the artifacts/binaries to the target environment.
-				
-				
-				Source Dir. 																		Destination Dir.
-				
-					target/mvn-hello-world.war					====>									/opt/tomcat/webapps/mvn-hello-world.war	
-
-
-				From Jenkins Dashboard Install Plugin :	Publish over SSH Plugins  
-				
-				Install with Restart Option - 
-				
-				go to system config. and Add Remote Server.
-				
-				cp *.war /opt/tomcat1/webapp /opt/tomcat1/webapp
+	
 				
 pipeline {
     agent { label 'slave1' }
@@ -722,7 +695,7 @@ pipeline {
         stage('Deploy to QA Envi.') {
             steps {
 				script {
-					sshPublisher(publishers: [sshPublisherDesc(configName: 'QA_Server-WE', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+					sshPublisher(publishers: [sshPublisherDesc(configName: 'QA-Server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 				}
             }
         }
@@ -758,97 +731,162 @@ Build Triggers :::
 																	
 
 
-######################Install TOMCAT Application Server on Ubuntu :::
+######################STEPS TO Install/RUN TOMCAT Application Server on Ubuntu#########################
 
 
 https://tomcat.apache.org/download-80.cgi
-
 Enable Port 8080 :
+1. Launch a new VM
+2. sudo -i (change to root user)
+3. sudo apt update -y -----> update the vm package
 
-sudo -i
-sudo apt update -y
-sudo apt install openjdk-11-jre -y 
-java -version
+4. sudo apt install openjdk-11-jre -y  -------> install java
+	java -version
 
-#edit /etc/profile & add JAVA_HOME
+	####edit /etc/profile & add JAVA_HOME & ENABLE ENVT VARIABLES######
 
-#/usr/lib/jvm/java-11-openjdk-amd64/
+5. Go to  ---> 	/usr/lib/jvm/
+			java-11-openjdk-amd64/ -----------> installed
+6. vi /etc/profile
+	Identify the java version you are running ----> /usr/lib/jvm/java-11-openjdk-amd64
 
-vi /etc/profile
-
-/usr/lib/jvm/java-11-openjdk-amd64
-
-export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+7. copy and paste into the /etc/profile file ------- > 	export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
 
-source /etc/profile
+8. source /etc/profile ---------> to refresh your profile (very much required)
 
-Install Tomcat ::
+	###Install Tomcat#### ::
 
-cd /opt
-wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.95/bin/apache-tomcat-8.5.95.tar.gz
+9. Go to opt diretory ------> cd /opt -----> to install tomcat package
+	
+10. wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.95/bin/apache-tomcat-8.5.95.tar.gz
+	###go to tomcat website, copy the link of the tomcat version you want, copy the tar.gz file####
+		https://tomcat.apache.org/download-80.cgi
 
-https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.95/bin/apache-tomcat-8.5.95.tar.gz
+11. ls command to see the downloaded tomcat tar file
+		apache-tomcat-8.5.96.tar.gz
 
-tar -xvzf /opt/apache-tomcat-8.5.95.tar.gz
+12. use the command ----> tar -xvzf /opt/apache-tomcat-8.5.96.tar.gz
+		###use the above command to extract the tar files###
 
-apache-tomcat-8.5.95.tar.gz
+13. mv apache-tomcat-8.5.95 tomcat -----> to rename the file to tomcat for easy remembering.
 
-mv apache-tomcat-8.5.95 tomcat
+	###Start Tomcat Server:#####
+		#Goto: bin folder
 
-#Start Tomcat Server:
-#Goto:
+14. cd /opt/tomcat/bin
+15. ./startup.sh  -------> execute the command to start the tomcat server
 
-cd /opt/tomcat/bin
-./startup.sh
+16.go to your VM, take the public app with the port number of the tomcat server and start your tomcat
 
-
-###########################################
-
-#Add User : 
+############### NEXT STEP ONCE THE SERVER IS READY (TO  CONNECT YOUR TOMCAT SERVER TO JENKINS) ############################
+	(You must create a new dedicated valid user for the execution face
+	#####the user must have valid SSH keys.
+	#####Once thessh keys is ready, you must create an autorized keys
+	####make sure the authorized keys is only accessible by the owner
+	
+###STEPS TO CREATING YOUR TOMCAT USER TO CONNECT TO JENKINS#### 
 
 #useradd -m -d /home/devopsadmin devopsadmin
 #useradd devopsadmin
 
-useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+	1. useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin ----> to create new user
+	2. su - devopsadmin ---> log intothe new user
 
-su - devopsadmin
-
-#ssh-keygen
-
+#ssh-keygen (CREATING SSH KEYS)
 #for Ubuntu ::
-ssh-keygen -t rsa -b 2048 -m PEM
+	3. ssh-keygen -t rsa -b 2048 -m PEM
 
-
-ls ~/.ssh 
+	4. ls ~/.ssh ------> go to the folder
 
 #You should see following two files:
-
 #id_rsa - private key
 #id_rsa.pub - public
 
+	5. cat id_rsa.pub > authorized_keys ----> create an authorized key folder
 
-cat id_rsa.pub > authorized_keys
-
-chown -R devopsadmin /home/devopsadmin/.ssh
+	(make the authorized keys only accessible to the owner)
+6. chown -R devopsadmin /home/devopsadmin/.ssh
 chmod 600 /home/devopsadmin/.ssh/authorized_keys
 chmod 700 /home/devopsadmin/.ssh
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#make devopsadmin user as a owner to tomcat dir :
-
-chown -R devopsadmin /opt/tomcat
+	7. log into the tomcat server with the new created user (devopsadmin)
+		cd /opt/tomcat
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#make devopsadmin user as a owner to tomcat dir in other to be able to access the webapps :
+
+	8. chown -R devopsadmin /opt/tomcat -----> execute the command as a root user
+
+########################################################
+#STEPS TO DEPLOY TO A SERVER USING TOMCAT
+#######################################################
+ Deployment --> Copy the created artifacts/binaries from source(jenkins slave) to target server(Tomcat server) 
+###NOTE:::: the artifacts should only be copied to the webapps folder in tomcat server
+--> Jenkins_Slave (locate the folder the artifact iscreated in jenkins)			--->		Tomcat_Server 
+target/mvn-hello-world.war								====>		/opt/tomcat/webapps/	
+
+1. GO TO JENKINS MASTER
+	#Manage Jenkins
+	#plugins
+	Install:::::::::  Publish over SSH Plugins
+	#click restart after plugings installation
+
+2. Go to system config. and Add Remote Server.
+	#Scroll down to publish over ssh
+	##Under publish ssh, click ADD option
+		Name::: Any name of your choice
+		Host name: Private IP address of the QA-server of the AWS VM
+		username:: the username created (devopsadmin)
+		Reomte directory(target folder for deployment):  /opt/tomcat/webapps
+		click ADVANCE, tick use PASSWORD AUTHENTICATION
+			Go to QA-Server (SSH) and copy id_rsa keys and paste in keys
+			Click test configuration to see that your tomcat server is connected to jenkins server
+			click apply to save changes.
+
+3. Go to the pipeline project, click configure
+	#scroll down to your pipeline script, click PIPELINE SYNTAX
+		#Sample steps:: choose SSH Publisher (the installed plugins)
+		#SSH server: choose your server
+		#Source files:: copy and paste the dirctory of where your artifact is saved (target/mvn-hello-world.war)
+		#Remove prefix: from the dir(target/mvn-hello-world.war), remove "target" and paste, so that it will
+				copy only the "mvn-hello-world.war" artifact folder.
+		#Remote Dir(target dir):: put dot (.) to indicate the present directory where the artifact will be deployed.
+		#Click Generate pipeline Script
+
+4. Copy the generated script (enclose it with bracket as its a script) and paste in your pipeline project script and click apply.
+5. click apply and run the job. And the tomcat server starts running
+
+#########################################################################
+CONFIGURING YOUR TOMCAT WEB SERVER
+#########################################################################
+	1. Copy the built artifact, remove the file extension name
+	2. paste in the VM web
+		
+				
+					Jenkins_Master				==> Create & Manage Jenkins Jobs/Schedule the job to slave ndoes.
+						Jenkins_SlaveNode1		==> Perform the build 
+					QA_Server 					==> Run the application using tomcat 
+					UAT_Server 
+					Kubernetes
+				
+
+				What is Deployment????
+				
+				--> It is process of copying the artifacts/binaries to the target environment.
+				
+				
+				Source Dir. 																		Destination Dir.
+				
+					target/mvn-hello-world.war					====>									/opt/tomcat/webapps/mvn-hello-world.war	
 
 
-Deployment --> Copy the artifacts from source to target server 
+				From Jenkins Dashboard Install Plugin :	Publish over SSH Plugins  
+				
+				Install with Restart Option - 
+				
+				cp *.war /opt/tomcat1/webapp /opt/tomcat1/webapp
 
-	--> Jenkins_Slave 											--->					Tomcat_Server 
-			target/mvn-hello-world.war							====>					/opt/tomcat/webapps/	
-			
-			
-Install publish over ssh in Jenkins Master 		& restart jenkins 	
 
 					
 		
