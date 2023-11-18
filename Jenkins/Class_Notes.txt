@@ -650,11 +650,9 @@ Next ::
 		Deploy to Tomcat Server		
 		Email Notification....
 		Best Practise.
-		
-		
+				
 			- Launch VM - Application Execution
-			
-			
+						
 			
 	Environments :::
 	
@@ -703,18 +701,20 @@ pipeline {
 }				
 
 
+###############################################################
+Build Triggers ::: 
+################################################################
+Jenkins supports three types of build schedule triggers
+	1. Build periodic
+	2. Github webhook
+	3. Poll SCM
 
-Build Triggers :::
+1. Build Periodic 		https://crontab.guru/
+	#It is used to schedule the job based on CronTab.
+	#used to clean activities on the jenkinsslavenodes
 
-
-		- Build Periodic 		https://crontab.guru/
-		
-			It is used to schedule the job based on CronTab.
-
-					
-					Eg.: 
-						To run the Jobs for every 1 Hour.
-				
+				Eg.: 
+						To run the Jobs for every 1 Hour.				
 				UseCase ::
 							Clean_up activities on the Slave nodes.
 								Job ==> Scheduled to run - once in 3 days.
@@ -784,8 +784,10 @@ PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
 	#####the user must have valid SSH keys.
 	#####Once thessh keys is ready, you must create an autorized keys
 	####make sure the authorized keys is only accessible by the owner
-	
-###STEPS TO CREATING YOUR TOMCAT USER TO CONNECT TO JENKINS#### 
+
+###########################################################
+STEPS TO CREATING YOUR TOMCAT USER TO CONNECT TO JENKINS 
+#########################################################
 
 #useradd -m -d /home/devopsadmin devopsadmin
 #useradd devopsadmin
@@ -891,17 +893,21 @@ CONFIGURING YOUR TOMCAT WEB SERVER
 					
 		
 		- Github webhook :::
-		
 			Both Github-webhook and Poll SCM are based on the source code changes.
-			
+
 				Github-webhook -- will trigger the job as soon as we commit the changes in Src_Code Repository.
-				
-				- Create web hook configurations in the Src_Code Repository
-					- Config the Jenkins payload url in src_code Repository
-					
+
+		STEPS TO CONFIGURE GITHUB WEBHOOK
+		1.  Create web hook configurations in the Src_Code Repository
+			- Config the Jenkins payload url in src_code Repository
+				- Go to Github, the src code repo
+				- Click on settings
+				- click webhook, Add new webhook
+				- Go to jenkins dashboard, copy the url
+				- Add the tag github-webhook (mandatory
+
 						Eg.: 
-								http://3.108.59.111:8080/github-webhook/
-								
+								http://3.108.59.111:8080/github-webhook/			
 								http://13.232.187.76:8080/github-webhook/
 								
 				- Enable Github trigger option in Jenkins Job.
@@ -925,10 +931,11 @@ CONFIGURING YOUR TOMCAT WEB SERVER
 												3 PM
 				
 
-
-Notifications ::
-
-		Email Notifications :::::
+#########################################################
+Notifications :: set incase any build stage fails.
+#######################################################
+		Email Notifications ::::: Go to Jenkins dashboard
+					Manage jenkins, system configurations
 
 
 Email Notification Plugins :::
@@ -951,13 +958,13 @@ App Password = 16 bytes of code.
 What ? window
 Which Appln - email
 		
-
+####################################################################
 Next :::
 IAC Tools :::
 
 	Ansible ::::
 	Terraform :::
-
+######################################################################
 
 Docker/Kubernetes 
 
