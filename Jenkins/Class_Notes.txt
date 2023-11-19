@@ -423,9 +423,9 @@ pipeline {
     }
 }	
 		
-		
+	#############################################################################################################	
 			PIPELINE PROJECTS STAGES/STEPS BASED ON REAL TIME ENVT ::: USING MAVEN AS THE BUILD TOOL
-			
+	############################################################################################################		
 				Stages (tasks or activities given to perform) :::
 					Clone the Src_Code Repos in the build server
 					Build::::: Using some build tools (Maven)
@@ -753,15 +753,16 @@ Enable Port 8080 :
 7. copy and paste into the /etc/profile file ------- > 	export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
 
-8. source /etc/profile ---------> to refresh your profile (very much required)
+8. source /etc/profile ---------> to refresh your profile (very much required to execute the command)
 
 	###Install Tomcat#### ::
 
 9. Go to opt diretory ------> cd /opt -----> to install tomcat package
-	
-10. wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.95/bin/apache-tomcat-8.5.95.tar.gz
+
 	###go to tomcat website, copy the link of the tomcat version you want, copy the tar.gz file####
 		https://tomcat.apache.org/download-80.cgi
+
+10. wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.95/bin/apache-tomcat-8.5.95.tar.gz
 
 11. ls command to see the downloaded tomcat tar file
 		apache-tomcat-8.5.96.tar.gz
@@ -780,7 +781,7 @@ PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
 16.go to your VM, take the public app with the port number of the tomcat server and start your tomcat
 
 ############### NEXT STEP ONCE THE SERVER IS READY (TO  CONNECT YOUR TOMCAT SERVER TO JENKINS) ############################
-	(You must create a new dedicated valid user for the execution face
+	(You must create a new dedicated valid user for the execution face in your tomcat server
 	#####the user must have valid SSH keys.
 	#####Once thessh keys is ready, you must create an autorized keys
 	####make sure the authorized keys is only accessible by the owner
@@ -825,7 +826,7 @@ chmod 700 /home/devopsadmin/.ssh
 #######################################################
  Deployment --> Copy the created artifacts/binaries from source(jenkins slave) to target server(Tomcat server) 
 ###NOTE:::: the artifacts should only be copied to the webapps folder in tomcat server
---> Jenkins_Slave (locate the folder the artifact iscreated in jenkins)			--->		Tomcat_Server 
+--> Jenkins_Slave (locate the folder the artifact is created in jenkins)		--->		Tomcat_Server 
 target/mvn-hello-world.war								====>		/opt/tomcat/webapps/	
 
 1. GO TO JENKINS MASTER
@@ -877,15 +878,6 @@ CONFIGURING YOUR TOMCAT WEB SERVER
 				
 				--> It is process of copying the artifacts/binaries to the target environment.
 				
-				
-				Source Dir. 																		Destination Dir.
-				
-					target/mvn-hello-world.war					====>									/opt/tomcat/webapps/mvn-hello-world.war	
-
-
-				From Jenkins Dashboard Install Plugin :	Publish over SSH Plugins  
-				
-				Install with Restart Option - 
 				
 				cp *.war /opt/tomcat1/webapp /opt/tomcat1/webapp
 
@@ -1053,11 +1045,4 @@ chown -R devopsadmin /opt/tomcat
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-Deployment --> Copy the artifacts from source to target server 
-
-	--> Jenkins_Slave 											--->					Tomcat_Server 
-			target/mvn-hello-world.war							====>					/opt/tomcat/webapps/	
-			
-			
-Install publish over ssh in Jenkins Master 		& restart jenkins 	
+	
