@@ -131,25 +131,25 @@ First thing to do when ever you are to work with Ansible:
 					- Ansible Adhoc Commands
 					- Ansible Playbooks 
 					
+	#################################################################################################				
+		SSH Connection --> To establish SSH coonections for servers, you should know how to
+					create User ID and  SSH Keys.
+	###################################################################################################							
+		In Jenkins ::
 					
-					SSH Connection --> To establish SSH coonections for servers, you should know how to
-								create User ID and  SSH Keys.
-					
-					
-					In Jenkins ::
-					
-						Jenkins_Master 				
-							Jenkins_SlaveNode1 	- Create ssh_keys in slave node & shared the private key of slavenode to master node.
+			Jenkins_Master 				
+			Jenkins_SlaveNode1 	- Create ssh_keys in slave node & shared the private key of slavenode to master node.
 							
 							
-					In Ansible Architecture ::
+		In Ansible Architecture :: we do not share private jeys, because the machines do not belong to same team,
+						rather we use password base authentications.
 					
-						Ansible Controller 				- public / private  -- ssh -> 
-							Ansible Target1 - Dev 
-							Ansible Target2 - Test 
-			
-				Linux Authentication Methods :::
-				
+			Ansible Controller 				- public / private  -- ssh -> 
+				Ansible Target1 - Dev 
+				Ansible Target2 - Test 
+	###############################################################		
+		Various Authentication Methods in LINUX :::
+	#############################################################
 					Password based Auth
 					key based Auth
 					Token based Auth 
