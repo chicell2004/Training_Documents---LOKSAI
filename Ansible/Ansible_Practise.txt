@@ -1,83 +1,104 @@
-Ansible Installation & Configurations:
+#########################################################################################################################
+	Steps on Ansible Installation & Configurations: AND HOW TO USETHE CONTROLLER MACHINE TO MANAGE THE TARGET SERVERS
+##############################################################################################################################
 
-Launch 3 EC2 Instances... 1 for Ansible Controller & 2 as Nodes
+ Launch (three) 3 EC2 Instances... 1 for Ansible Controller & 2 as Nodes
+log into the ansible controller and the two target nodes (Node 1 and 2) through mobaxterm or putty
 
-SSH connections :::
+NOTE:: Whenever you are working on Ansible or any other CONFIGURATION MANAGEMENT tool, your target nodes should always
+		be ready when ever you are working with the Ansible controller.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#Login to Ansible Node1 & Node2. Perform below activities:
-
-#Add User in Ansible Nodes : 
-
-sudo -i
-
-apt update -y 
-
-useradd ansibleadmin -s /bin/bash -m -d /home/ansibleadmin 
-
-passwd ansibleadmin
-
-#Enter New Password:
-#Confirm Password:
-
-#Goto:
-
-vi /etc/ssh/sshd_config
-
-#Enable Password Authentication to Yes and save the file
-#Execute Below command to update the changes.
-
-service sshd reload
-
-#As a root user edit below file:
-$ visudo
-
-#add the below mentioned line in the file and save it.
-ansibleadmin ALL=(ALL) NOPASSWD: ALL
-
-su - ansibleadmin
-
-ls -a 
+2. SSH connections :::
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+STEPS
+#Login to Ansible Node1 & Node2 first and Perform below activities: 
+##########################################################################
 
+1. sudo -i ----------------> change to root user
+2. apt update -y --------------> update the machine default packages
+
+#Add User in Ansible Nodes : And that user should have password
+
+3. useradd ansibleadmin -s /bin/bash -m -d /home/ansibleadmin 
+
+	create a passwordfor the user
+4. passwd ansibleadmin
+	#Enter New Password:
+	#Confirm Password:
+
+#Goto once the password is created: to update the ssh file for password authentication
+
+5. vi /etc/ssh/sshd_config
+	#scroll down to Enable Password Authentication and change to Yes and save the file
+
+Reload the ssh service once the ssh file is configured with the below command
+6. service sshd reload
+
+	#once the ssh is reloaded, As a root user edit below file:
+7. visudo
+	use the command above, scroll down to "root user privilege specification" and paste the below command
+	and save the file, this is to grant equal rights to the user created.
+
+8. ansibleadmin ALL=(ALL) NOPASSWD: ALL
+
+	log into the new created user account
+9. su - ansibleadmin
+
+	ls -a 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#######################################################################################################
 #Login to Ansible Controller: https://docs.ansible.com/ansible/latest/installation_guide/index.html
+ (Ansible should only be installed in the CONTROLLER machine)
+##########################################################################################################
+1. sudo -i
 
-sudo -i
+2. sudo apt update -y
 
-sudo apt update -y
+3. sudo apt install software-properties-common -y
 
-sudo apt install software-properties-common -y
+4. sudo add-apt-repository --yes --update ppa:ansible/ansible
 
-sudo add-apt-repository --yes --update ppa:ansible/ansible
+5. sudo apt update -y
 
-sudo apt update -y
+6. sudo apt install ansible -y
 
-sudo apt install ansible -y
+	ansible --version
 
-ansible --version
+		#go to /etc/ansible
+		#host - inventory file
+		#config
+		#roles 
 
-#go to /etc/ansible
+	create user admin for ansiblecontroller
+7. useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
 
-#host - inventory file
-#config
-#roles 
+	log into the new created user
+8. su - devopsadmin	
 
-#Add User in Ansible Controller : 
+	Create ssh key for Ansible controller and copy the keys to the target servers
+9. ssh-keygen -t rsa -b 1024 -m PEM
 
-useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+	log into .ssh to see your public and private keys
+10 cd .ssh
 
-#useradd devopsadmin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	we are going to share the public keys of the controller to the target servers.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	copy the pub ssh keys of the controller and paste into the target servers as authorization key.
+					- copy the private ip add of the AWS target server and the username of the target server.
+					- add the ip with the command below and execute in the ansible controller
 
-su - devopsadmin	
+11. ssh-copy-id ansibleadmin@172.31.47.75	 ----> targetnode1
+    ssh-copy-id ansibleadmin@172.31.36.191 ----> targetnode2
 
-ssh-keygen -t rsa -b 1024 -m PEM
-
-ssh-copy-id ansibleadmin@172.31.40.9
-ssh-copy-id ansibleadmin@172.31.34.153
-
-ssh ansibleadmin@172.31.40.9
-ssh ansibleadmin@172.31.34.153
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	To connect to the target servers from the controller machine
+			- use the below command - ssh targetserver username followed by the private ip
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+12. ssh ansibleadmin@172.31.47.75 ----------> to log into target server1 from the controller
+13. ssh ansibleadmin@172.31.36.191 ---------> log into server2
 
 chown -R devopsadmin:devopsadmin /etc/ansible
 
@@ -85,8 +106,8 @@ chown -R devopsadmin:devopsadmin /etc/ansible
 ###update vi etc/ansible/host
 
 [testnodes]
-samplenode1 ansible_ssh_host=172.31.40.9 ansible_ssh_user=ansibleadmin
-samplenode2 ansible_ssh_host=172.31.34.153 ansible_ssh_user=ansibleadmin
+samplenode1 ansible_ssh_host=172.31.47.75 ansible_ssh_user=ansibleadmin
+samplenode2 ansible_ssh_host=172.31.36.191 ansible_ssh_user=ansibleadmin
 
 
 #**************************************************************************************************************************
