@@ -124,17 +124,16 @@ First thing to do when ever you are to work with Ansible:
 				2. Modules 
 				3. Playbooks 
 			
-	####################################################
-	HOWTO CREATE AN INVENTORY FILE
-	#############################################
-		- 
-			Installation :::
+	##################################################################
+			Installations Pf ANSIBLE AND ITS ARCHITETURES :::
+	#####################################################################
 					- Install and Configure Ansible Controller & target Nodes
 					- Ansible Adhoc Commands
 					- Ansible Playbooks 
 					
 					
-					SSH Connection --> User ID / SSH Keys.
+					SSH Connection --> To establish SSH coonections for servers, you should know how to
+								create User ID and  SSH Keys.
 					
 					
 					In Jenkins ::
