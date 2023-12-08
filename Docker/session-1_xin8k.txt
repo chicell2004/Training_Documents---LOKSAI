@@ -1,0 +1,39 @@
+Container == Namespaces == for ISOLATION
+
+UTS --> allow a single system to appear to have different host and domain names to different processes
+
+UID --> isolation feature that allow processes to run with different user identifiers and/or privileges inside
+
+IPC --> IPCs handle the communication between processes by using shared memory areas, message queues, and semaphores.
+
+Network --> Network namespaces virtualize the network stack
+
+Mount --> The mount namespace is used to isolate mount points such that processes in different namespaces cannot view each others' files. 
+
+PID --> Isolates processes
+
+Create namespace --> 
+unshare --fork --pid --mount-proc bash
+
+list namespace --> 
+lsns
+
+unshare=container create
+
+https://resources.infosecinstitute.com/topic/securing-containers-using-docker-isolation/
+
+
+
+Install docker --> 
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+sudo systemctl start docker
+sudo systemctl enable docker
+systemctl status docker
+
+
+
+docker run -it ubuntu bash
+docker ps -a
