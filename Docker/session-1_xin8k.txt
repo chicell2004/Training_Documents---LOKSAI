@@ -1,14 +1,19 @@
-Container == Namespaces == for ISOLATION
+#################################################################################
+CONTAINERIZATION: An implementation of namespaces using kernel features.
+###################################################################################
 
-UTS --> allow a single system to appear to have different host and domain names to different processes
+Container == 5 TYPES OF  Namespaces == for ISOLATION
 
-UID --> isolation feature that allow processes to run with different user identifiers and/or privileges inside
+    1.  UTS --> allow a single system to appear to have different host and domain names to different processes
 
-IPC --> IPCs handle the communication between processes by using shared memory areas, message queues, and semaphores.
+    2.  UID --> isolation feature that allow processes to run with different user identifiers and/or privileges inside
 
-Network --> Network namespaces virtualize the network stack
+    3.  IPC --> IPCs handle the communication between processes by using shared memory areas, message queues, and semaphores.
 
-Mount --> The mount namespace is used to isolate mount points such that processes in different namespaces cannot view each others' files. 
+    4.  Network --> Network namespaces virtualize the network stack
+
+    5.  Mount --> The mount namespace is used to isolate mount points such that processes in different namespaces cannot view each others' files. 
+
 
 PID --> Isolates processes
 
