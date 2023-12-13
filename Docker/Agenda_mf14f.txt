@@ -70,3 +70,14 @@ Introduction to kubernetes
 Architecture
 Deploying a k8s cluster
 
+
+
+	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		CLASS 2
+	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#########################################################
+DOCKER ARCHITECTURE
+##############################################
+            MADE UP OF: Docker client
+                        Docker engine or daemon
+                        Docker Registry
