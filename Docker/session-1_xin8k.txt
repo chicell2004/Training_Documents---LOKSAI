@@ -14,6 +14,12 @@ Container == 5 TYPES OF  Namespaces == for ISOLATION
 
     5.  Mount --> The mount namespace is used to isolate mount points such that processes in different namespaces cannot view each others' files. 
 
+#########################################################
+DOCKER ARCHITECTURE
+##############################################
+            MADE UP OF: Docker client
+                        Docker engine or daemon
+                        Docker Registry
 
 PID --> Isolates processes
 
